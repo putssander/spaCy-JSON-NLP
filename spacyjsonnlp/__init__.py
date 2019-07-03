@@ -14,12 +14,16 @@ Brought to you by the NLP-Lab.org (https://nlp-lab.org/)!
 
 import functools
 import re
+import os
 from collections import OrderedDict, defaultdict, Counter
 from typing import Dict, Tuple
 
-import neuralcoref
+if os.environ.get('COREFERENCES', 'true') != 'false':
+    import neuralcoref
+if os.environ.get('CONSTITUENTS', 'true') != 'false':
+    from benepar.spacy_plugin import BeneparComponent
+
 import spacy
-from benepar.spacy_plugin import BeneparComponent
 from pyjsonnlp import get_base, get_base_document, remove_empty_fields, build_constituents, find_head, build_coreference
 from pyjsonnlp.pipeline import Pipeline
 from pyjsonnlp.tokenization import segment
