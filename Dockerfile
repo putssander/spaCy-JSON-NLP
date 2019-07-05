@@ -15,9 +15,6 @@ ADD ./setup.py  /app/setup.py
 WORKDIR /app/
 RUN python setup.py install
 
-RUN python -m spacy download en
-RUN python -m spacy download en_core_web_md
-
 COPY . / /app/
 
 ENV PYTHONPATH /app/$PYTHONPATH
