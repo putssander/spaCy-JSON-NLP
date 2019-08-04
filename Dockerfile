@@ -1,3 +1,4 @@
+# docker build . -t putssander/spacy-json-nlp:base_v2
 FROM tiangolo/uwsgi-nginx-flask:python3.7
 LABEL maintainer="putssander"
 LABEL version="0.2"
@@ -17,7 +18,7 @@ RUN python setup.py install
 
 COPY . / /app/
 
-ENV PYTHONPATH /app/$PYTHONPATH
+ENV PYTHONPATH "${PYTHONPATH}:/app"
 
 ENV OPTIONAL_ARGS=''
 ENV COREFERENCES='false'
