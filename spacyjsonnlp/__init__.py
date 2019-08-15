@@ -11,7 +11,6 @@ Licensed under the Apache License 2.0, see the file LICENSE for more details.
 Brought to you by the NLP-Lab.org (https://nlp-lab.org/)!
 """
 
-
 import functools
 import re
 import os
@@ -33,7 +32,7 @@ from spacy.tokens import Doc
 #from dependencies import DependencyAnnotator
 
 name = "spacypyjsonnlp"
-__version__ = '0.0.20'
+__version__ = '0.1.3'
 
 # allowed model names
 MODEL_NAMES = ('en_core_web_sm', 'en_core_web_md', 'en_core_web_lg' 'xx_ent_wiki_sm', 'de_core_news_sm', 'es_core_news_sm',
@@ -108,11 +107,12 @@ class SpacyPipeline(Pipeline):
         lang = Counter()  # track the frequency of each language
         sent_lookup: Dict[int, int] = {}  # map sentence end_char to our index
         token_lookup: Dict[Tuple[int, int], int] = {}  # map (sent_id, spacy token index) to our token index
-
+    
         # tokens and sentences
         token_id = 1
         sent_num = 1
         for sent in doc.sents:
+            
             current_sent = {
                 'id': sent_num,
                 'tokenFrom': token_id,
@@ -204,29 +204,21 @@ class SpacyPipeline(Pipeline):
 
         # dependencies
         if dependencies:
-            deps = {
-                'style': 'universal',
-                #'arcs': {}
-                'trees':[]
-            }
-            d['dependencies']=deps
+            d['dependencies']=[]
             for sent_num, sent in enumerate(doc.sents):
-                temp = []
+                deps = {
+                'style': "universal",
+                'trees':[]
+                }
                 for token in sent:
                     dependent = token_lookup[(sent_num+1, token.i)]
-                    #deps['arcs'][dependent] = [{
-                    temp.append({   
+                    deps['trees'].append({   
                         #'sentenceId': sent_num+1,
                         'lab': token.dep_ if token.dep_ != 'ROOT' else 'root',
                         'gov': token_lookup[(sent_num+1, token.head.i)] if token.dep_ != 'ROOT' else 0,
                         'dep': dependent
                     })
-                deps['trees'].append(temp)
-               # print(len(deps['arcs']))
-
-            # clause, grammar extractions
-            #clause_annotator = DependencyAnnotator()
-            #clause_annotator.annotate(j)
+                d['dependencies'].append(deps)
 
         # coref
         # noinspection PyProtectedMember
@@ -252,4 +244,4 @@ class SpacyPipeline(Pipeline):
 
 if __name__ == "__main__":
     test_text = "The Mueller Report is a very long report. We spent a long time analyzing it. Trump wishes we didn't, but that didn't stop the intrepid NlpLab."
-    print(SpacyPipeline.process(test_text, spacy_model='en_core_web_md', coreferences=True, constituents=False))
+    print(SpacyPipeline.process(test_text, spacy_model='en_core_web_md', coreferences=True, constituents=True))
