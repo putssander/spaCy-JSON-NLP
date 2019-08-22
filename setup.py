@@ -16,7 +16,7 @@ setuptools.setup(
     url="https://github.com/dcavar/spaCy-JSON-NLP",
     packages=setuptools.find_packages(),
     install_requires=[
-        'spacy>=2.1',
+        'spacy==2.1.0',
         'neuralcoref>=4.0',
         'pyjsonnlp>=0.2.12',
         'benepar[cpu]>=0.1.2',
