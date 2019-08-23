@@ -91,7 +91,7 @@ class SyntokTokenizer(object):
 
 class SpacyPipeline(Pipeline):
     @staticmethod
-    def process(text: str = '', spacy_model='en_core_web_sm', coreferences=False, constituents=False, dependencies=True, expressions=True, identifier: str = '') -> OrderedDict:
+    def process(text: str = '', spacy_model='en_core_web_sm', coreferences=False, constituents=False, dependencies=True, expressions=True, **kwargs) -> OrderedDict:
         """Process provided text"""
         nlp = get_model(spacy_model, coreferences, constituents)
         nlp.tokenizer = SyntokTokenizer(nlp.vocab)
@@ -101,7 +101,7 @@ class SpacyPipeline(Pipeline):
         j['documents'].append(d)
 
         d['meta']['DC.source'] = 'SpaCy {}'.format(spacy.__version__)
-        d['meta']['DC.identifier'] = identifier
+        d = SpacyPipeline.add_meta(d, kwargs)
         d['text'] = text
 
         model_lang = spacy_model[0:2]
@@ -241,6 +241,12 @@ class SpacyPipeline(Pipeline):
 
         return remove_empty_fields(j)
         #return j
+
+    @staticmethod
+    def add_meta(d, kwargs) -> OrderedDict:
+        if 'identifier' in kwargs:
+            d['meta']['DC.identifier'] = kwargs['identifier']
+        return d
 
 
 if __name__ == "__main__":
