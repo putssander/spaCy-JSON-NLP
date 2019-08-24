@@ -242,10 +242,37 @@ class SpacyPipeline(Pipeline):
         return remove_empty_fields(j)
         #return j
 
-    @staticmethod
+    @staticmethod  # should be in higher level package?
     def add_meta(d, kwargs) -> OrderedDict:
         if 'identifier' in kwargs:
             d['meta']['DC.identifier'] = kwargs['identifier']
+        if 'created' in kwargs:
+            d['meta']['DC.created'] = kwargs['created']
+
+        if 'source' in kwargs:
+            d['meta']['DC.source'] = kwargs['source']
+        if 'creator' in kwargs:
+            d['meta']['DC.creator'] = kwargs['creator']
+        if 'publisher' in kwargs:
+            d['meta']['DC.publisher'] = kwargs['publisher']
+        if 'title' in kwargs:
+            d['meta']['DC.title'] = kwargs['title']
+        if 'description' in kwargs:
+            d['meta']['DC.description'] = kwargs['description']
+        if 'subject' in kwargs:
+            d['meta']['DC.subject'] = kwargs['subject']
+        if 'contributors' in kwargs:
+            d['meta']['DC.contributors'] = kwargs['contributors']
+        if 'type' in kwargs:
+            d['meta']['DC.type'] = kwargs['type']
+        if 'format' in kwargs:
+            d['meta']['DC.format'] = kwargs['format']
+        if 'relation' in kwargs:
+            d['meta']['DC.relation'] = kwargs['relation']
+        if 'coverage' in kwargs:
+            d['meta']['DC.coverage'] = kwargs['coverage']
+        if 'rights' in kwargs:
+            d['meta']['DC.rights'] = kwargs['rights']
         return d
 
 
