@@ -18,5 +18,6 @@ RUN python -m spacy download el_core_news_sm
 RUN python -m spacy download el
 RUN python -m spacy download xx_ent_wiki_sm
 RUN python -m spacy download xx
-RUN python -m spacy download en_core_web_lg
+
+#RUN python -m spacy download en_core_web_lg
 RUN python -m spacy download en_core_web_md
