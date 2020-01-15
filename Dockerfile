@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     apt-get -q clean -y && rm -rf /var/lib/apt/lists/* && rm -f /var/cache/apt/*.bin
 
 ADD ./README.md  /app/README.md
+RUN pip install git+https://github.com/putssander/Py-JSON-NLP.git
 ADD ./setup.py  /app/setup.py
 WORKDIR /app/
 RUN python setup.py install

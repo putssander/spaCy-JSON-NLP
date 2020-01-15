@@ -22,6 +22,11 @@ TAGS at dockerhub [https://hub.docker.com/r/putssander/spacy-json-nlp/tags](http
 The TAG all_v2 should contain all language models, but currently only includes "en" and "nl_core_news_sm".
 Build files are included in this project.
 
+This only works with spaCy 2.1.0!
+
+I had the same issue. I downgraded Spacy from 2.1.4 to 2.1.0 and numpy to 1.14.5 to resolve.
+
+
 ## Introduction
 
 Currently this module requires Python 3.6+.

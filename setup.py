@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="spacyjsonnlp",
-    version='0.0.20',
+    version='0.1.3',
     python_requires='>=3.6',
     author="Damir Cavar, Oren Baldinger, Maanvitha Gongalla, Anurag Kumar, Murali Kammili",
     author_email="damir@cavar.me",
@@ -16,7 +16,7 @@ setuptools.setup(
     url="https://github.com/dcavar/spaCy-JSON-NLP",
     packages=setuptools.find_packages(),
     install_requires=[
-        'spacy>=2.1',
+        'spacy==2.1.0',
         'neuralcoref>=4.0',
         'pyjsonnlp>=0.2.12',
         'benepar[cpu]>=0.1.2',

@@ -11,7 +11,6 @@ Licensed under the Apache License 2.0, see the file LICENSE for more details.
 Brought to you by the NLP-Lab.org (https://nlp-lab.org/)!
 """
 
-
 import functools
 import re
 import os
@@ -33,7 +32,7 @@ from spacy.tokens import Doc
 #from dependencies import DependencyAnnotator
 
 name = "spacypyjsonnlp"
-__version__ = '0.0.20'
+__version__ = '0.1.3'
 
 # allowed model names
 MODEL_NAMES = ('en_core_web_sm', 'en_core_web_md', 'en_core_web_lg' 'xx_ent_wiki_sm', 'de_core_news_sm', 'es_core_news_sm',
@@ -92,7 +91,7 @@ class SyntokTokenizer(object):
 
 class SpacyPipeline(Pipeline):
     @staticmethod
-    def process(text: str = '', spacy_model='en_core_web_sm', coreferences=False, constituents=False, dependencies=True, expressions=True) -> OrderedDict:
+    def process(text: str = '', spacy_model='en_core_web_sm', coreferences=False, constituents=False, dependencies=True, expressions=True, **kwargs) -> OrderedDict:
         """Process provided text"""
         nlp = get_model(spacy_model, coreferences, constituents)
         nlp.tokenizer = SyntokTokenizer(nlp.vocab)
@@ -102,17 +101,19 @@ class SpacyPipeline(Pipeline):
         j['documents'].append(d)
 
         d['meta']['DC.source'] = 'SpaCy {}'.format(spacy.__version__)
+        d = SpacyPipeline.add_meta(d, kwargs)
         d['text'] = text
 
         model_lang = spacy_model[0:2]
         lang = Counter()  # track the frequency of each language
         sent_lookup: Dict[int, int] = {}  # map sentence end_char to our index
         token_lookup: Dict[Tuple[int, int], int] = {}  # map (sent_id, spacy token index) to our token index
-
+    
         # tokens and sentences
         token_id = 1
         sent_num = 1
         for sent in doc.sents:
+            
             current_sent = {
                 'id': sent_num,
                 'tokenFrom': token_id,
@@ -204,29 +205,21 @@ class SpacyPipeline(Pipeline):
 
         # dependencies
         if dependencies:
-            deps = {
-                'style': 'universal',
-                #'arcs': {}
-                'trees':[]
-            }
-            d['dependencies']=deps
+            d['dependencies']=[]
             for sent_num, sent in enumerate(doc.sents):
-                temp = []
+                deps = {
+                'style': "universal",
+                'trees':[]
+                }
                 for token in sent:
                     dependent = token_lookup[(sent_num+1, token.i)]
-                    #deps['arcs'][dependent] = [{
-                    temp.append({   
+                    deps['trees'].append({   
                         #'sentenceId': sent_num+1,
                         'lab': token.dep_ if token.dep_ != 'ROOT' else 'root',
                         'gov': token_lookup[(sent_num+1, token.head.i)] if token.dep_ != 'ROOT' else 0,
                         'dep': dependent
                     })
-                deps['trees'].append(temp)
-               # print(len(deps['arcs']))
-
-            # clause, grammar extractions
-            #clause_annotator = DependencyAnnotator()
-            #clause_annotator.annotate(j)
+                d['dependencies'].append(deps)
 
         # coref
         # noinspection PyProtectedMember
@@ -249,7 +242,40 @@ class SpacyPipeline(Pipeline):
         return remove_empty_fields(j)
         #return j
 
+    @staticmethod  # should be in higher level package?
+    def add_meta(d, kwargs) -> OrderedDict:
+        if 'identifier' in kwargs:
+            d['meta']['DC.identifier'] = kwargs['identifier']
+        if 'created' in kwargs:
+            d['meta']['DC.created'] = kwargs['created']
+
+        if 'source' in kwargs:
+            d['meta']['DC.source'] = kwargs['source']
+        if 'creator' in kwargs:
+            d['meta']['DC.creator'] = kwargs['creator']
+        if 'publisher' in kwargs:
+            d['meta']['DC.publisher'] = kwargs['publisher']
+        if 'title' in kwargs:
+            d['meta']['DC.title'] = kwargs['title']
+        if 'description' in kwargs:
+            d['meta']['DC.description'] = kwargs['description']
+        if 'subject' in kwargs:
+            d['meta']['DC.subject'] = kwargs['subject']
+        if 'contributors' in kwargs:
+            d['meta']['DC.contributors'] = kwargs['contributors']
+        if 'type' in kwargs:
+            d['meta']['DC.type'] = kwargs['type']
+        if 'format' in kwargs:
+            d['meta']['DC.format'] = kwargs['format']
+        if 'relation' in kwargs:
+            d['meta']['DC.relation'] = kwargs['relation']
+        if 'coverage' in kwargs:
+            d['meta']['DC.coverage'] = kwargs['coverage']
+        if 'rights' in kwargs:
+            d['meta']['DC.rights'] = kwargs['rights']
+        return d
+
 
 if __name__ == "__main__":
     test_text = "The Mueller Report is a very long report. We spent a long time analyzing it. Trump wishes we didn't, but that didn't stop the intrepid NlpLab."
-    print(SpacyPipeline.process(test_text, spacy_model='en_core_web_md', coreferences=True, constituents=False))
+    print(SpacyPipeline.process(test_text, spacy_model='en_core_web_md', coreferences=True, constituents=True))
