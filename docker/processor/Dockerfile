@@ -1,28 +1,35 @@
-# run from root of repo: docker build . -f docker/processor/Dockerfile -t putssander/spacy-json-nlp-processor:base_v2
-FROM putssander/spacy-json-nlp:base_v2
+# from from repository root
+# $ docker build . -f docker/processor/Dockerfile -t putssander/spacy-processor:2.2
+FROM springcloud/openjdk:latest
 
-#from Dockerfile springcloud/openjdk
-RUN apt-get update && apt-get install --no-install-recommends -y \
-    ca-certificates \
-    curl \
-    netcat \
-    wget \
- && rm -rf /var/lib/apt/lists/*
+# Install the required packages
+RUN apt-get update && apt-get install -y \
+    python3-pip \
+    build-essential \
+    libssl-dev \
+    git \
+    curl && \
+    apt-get -q clean -y && rm -rf /var/lib/apt/lists/* && rm -f /var/cache/apt/*.bin
 
-ENV JAVA_HOME /opt/openjdk
-ENV PATH $JAVA_HOME/bin:$PATH
+RUN pip3 install git+https://github.com/putssander/Py-JSON-NLP.git
+RUN pip3 install kafka-python
+RUN pip3 install cython
 
-COPY /docker/processor/wait-for-it.sh /wait-for-it.sh
-RUN chmod +x /wait-for-it.sh
+ADD ./setup.py  /app/setup.py
+WORKDIR /app/
+ADD ./README.md  /app/README.md
+RUN python3 setup.py install
+RUN python3 -m spacy download en_core_web_sm
+RUN python3 -m spacy download en_core_web_md
 
-RUN mkdir -p /opt/openjdk \
- && cd /opt/openjdk \
- && curl https://java-buildpack.cloudfoundry.org/openjdk/bionic/x86_64/openjdk-1.8.0_192.tar.gz | tar xz
+COPY ./ / /app/
 
-RUN pip install kafka-python
+ENV PYTHONPATH "${PYTHONPATH}:/app"
 
-#from spring template edit
-COPY spacyjsonnlp/processor.py /app/spacyjsonnlp
-COPY util/*.py /app/spacyjsonnlp/util/
+ENV OPTIONAL_ARGS=''
+ENV COREFERENCES='false'
+ENV CONSTITUENTS='false'
 
-ENTRYPOINT ["python", "/app/spacyjsonnlp/processor.py", "$@", "--"]
+WORKDIR /app
+
+ENTRYPOINT ["python3", "/app/spacyjsonnlp/processor/python_processor.py", "$@", "--"]
