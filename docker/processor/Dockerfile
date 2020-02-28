@@ -22,6 +22,9 @@ RUN python3 setup.py install
 RUN python3 -m spacy download en_core_web_sm
 RUN python3 -m spacy download en_core_web_md
 
+#NAF
+RUN pip3 install lxml
+
 COPY ./ / /app/
 
 ENV PYTHONPATH "${PYTHONPATH}:/app"

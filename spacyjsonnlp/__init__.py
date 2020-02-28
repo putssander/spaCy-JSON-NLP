@@ -239,7 +239,7 @@ class SpacyPipeline(Pipeline):
 
         d['meta']['DC.language'] = max(lang)
 
-        return remove_empty_fields(j)
+        return remove_empty_fields(j), doc
         #return j
 
     @staticmethod  # should be in higher level package?
