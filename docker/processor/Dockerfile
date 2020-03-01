@@ -23,10 +23,6 @@ ADD ./setup.py /app/setup.py
 ADD ./README.md /app/README.md
 RUN python3 setup.py install
 
-# spacy en sm and md in base
-RUN python3 -m spacy download en_core_web_sm
-RUN python3 -m spacy download en_core_web_md
-
 # NAF dependencies
 RUN pip3 install lxml
 
