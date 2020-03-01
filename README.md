@@ -4,28 +4,14 @@
 
 Brought to you by the [NLP-Lab.org]!
 
-## Docker edit
-
-    docker run --rm -p 5000:5001 putssander/spacy-json-nlp:all_v2
-
-
-By default the coreferencing and constituents models are not loaded, but can be loaded using environment variables.
-
-    docker run --rm -p 5000:5001 -e CONSTITUENTS=true -e COREFERENCES=true putssander/spacy-json-nlp:all_v2
-
-Example
-
-   [http://localhost:5000/?spacy_model=en&constituents=1&text=Trump%20is%20a%20humble%20person.%20What%20is%20he?](http://localhost:5000/?spacy_model=en&constituents=1&text=Trump%20is%20a%20humble%20person.%20What%20is%20he?)
-   
-TAGS at dockerhub [https://hub.docker.com/r/putssander/spacy-json-nlp/tags](https://hub.docker.com/r/putssander/spacy-json-nlp/tags)
-
-The TAG all_v2 should contain all language models, but currently only includes "en" and "nl_core_news_sm".
-Build files are included in this project.
-
 This only works with spaCy 2.1.0!
 
 I had the same issue. I downgraded Spacy from 2.1.4 to 2.1.0 and numpy to 1.14.5 to resolve.
 
+
+## Docker edit
+
+Docker and nlpflow-spacy [Spring Cloud Data Flow](https://dataflow.spring.io/) documentation [here](https://github.com/putssander/spaCy-JSON-NLP/tree/master/docker).
 
 ## Introduction
 
