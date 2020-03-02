@@ -226,11 +226,11 @@ def chunk_tuples_for_doc(doc):
     Generator function that takes a doc and yields ChunkElement tuples.
     """
     for i, (chunk, phrase) in enumerate(chunks_for_doc(doc)):
-        yield ChunkElement(cid = 'c' + str(i),
-                           head = 't' + str(chunk.root.i),
+        yield ChunkElement(cid = 'c' + str(i + 1),
+                           head = 't' + str(chunk.root.i + 1),
                            phrase = phrase,
                            text = remove_illegal_chars(chunk.orth_.replace('\n',' ')),
-                           targets = ['t' + str(tok.i) for tok in chunk])
+                           targets = ['t' + str(tok.i + 1) for tok in chunk])
 
 
 def add_chunk_element(chunks_layer, chunk_data, add_comments=False):

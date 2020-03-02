@@ -46,6 +46,7 @@ def is_json(unknown):
         json.loads(unknown)
     except ValueError:
         return False
+    logger.info('json')
     return True
 
 
@@ -65,9 +66,11 @@ while True:
             if is_json(message_value):
                 message_json = json.loads(message_value)
                 message_json['spacy_model'] = spacy_model
-            if 'identifier' in message_value:
-                document_id = message_json['identifier']
-                json_nlp, doc = app.process(message_json)
+                if 'identifier' in message_value:
+                    document_id = message_json['identifier']
+                if 'text' not in message_json:
+                    raise NotImplementedError('You need to provide data to parse!')
+                json_nlp, doc = app.process(text=message_json['text'], spacy_model=spacy_model, kwargs=message_json)
             else:
                 json_nlp, doc = app.process(text=message_value, spacy_model=spacy_model)
 
