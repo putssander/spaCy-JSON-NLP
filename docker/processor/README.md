@@ -11,6 +11,12 @@ Docker repository: [putssander/nlpflow-spacy]()
 In output over kafka
 
 In: text or json with key text
+
+    curl --header "Content-Type: application/json" \
+      --request POST \
+      --data '{"text":"Test a long sentence with a document identifier", "identifier": "a", "title": "this is a title"}' \
+      http://192.168.0.30:32123
+
 Out: JSON with key 'jsonnlp' and key 'naf-base64'
 
     {
@@ -20,4 +26,5 @@ Out: JSON with key 'jsonnlp' and key 'naf-base64'
 
 
 For more documentation see [NLPFLOW](https://github.com/putssander/nlpflow)
+    
     
