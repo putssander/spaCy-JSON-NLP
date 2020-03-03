@@ -68,6 +68,9 @@ while True:
                 message_json['spacy_model'] = spacy_model
                 if 'identifier' in message_value:
                     document_id = message_json['identifier']
+                if 'created' in message_value:
+                    # time_in_correct_format(datetime.datetime.strptime(message_value['created'], '%Y-%m-%dT%H:%M:%S.%fZ'))
+                    time_in_correct_format(message_value['created'])
                 if 'text' not in message_json:
                     raise NotImplementedError('You need to provide data to parse!')
                 json_nlp, doc = app.process(text=message_json['text'], spacy_model=spacy_model, kwargs=message_json)
