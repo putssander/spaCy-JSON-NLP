@@ -93,7 +93,7 @@ while True:
 
         logger.debug('Out: %s', json_result)
 
-        output_message = json_result.encode('utf-8')
-        producer.send(get_output_channel(), output_message)
+        message.value = json_result.encode('utf-8')
+        producer.send(get_output_channel(), message)
 
 
