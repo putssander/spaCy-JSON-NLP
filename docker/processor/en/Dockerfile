@@ -1,4 +1,4 @@
-# (from repository root) $ docker build . -f docker/processor/nl/Dockerfile -t putssander/nlpflow-spacy:nl_v2.2
+# (from repository root) $ docker build . -f docker/processor/en/Dockerfile -t putssander/nlpflow-spacy:en_v2.2
 
 FROM putssander/nlpflow-spacy:base_v2.2
 

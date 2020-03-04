@@ -88,15 +88,17 @@ while True:
         except Exception as e:
             logger.error("except", e)
 
-        json_result = json.dumps({
-            'name': document_id,
-            'json-nlp': json.dumps(json_nlp),
-            'naf-base64': naf_encoded
-        })
+        result = {
+            "name": document_id,
+            "json-nlp": json.loads(json.dumps(json_nlp)),
+            "naf-base64": naf_encoded
+        }
+
+        json_result = json.dumps(result)
 
         logger.debug('Out: %s', json_result)
 
-        message.value = json_result.encode('utf-8')
-        producer.send(get_output_channel(), message)
+        output_message = json_result.encode('utf-8')
+        producer.send(get_output_channel(), output_message)
 
 
