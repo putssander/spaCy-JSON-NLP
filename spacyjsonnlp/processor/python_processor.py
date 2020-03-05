@@ -89,7 +89,7 @@ while True:
             logger.error("except", e)
 
         result = {
-            "name": document_id,
+            "identifier": document_id,
             "json-nlp": json.loads(json.dumps(json_nlp)),
             "naf-base64": naf_encoded
         }
