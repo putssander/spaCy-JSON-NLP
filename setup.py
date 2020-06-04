@@ -18,7 +18,7 @@ setuptools.setup(
     install_requires=[
         'spacy==2.1.0',
         'neuralcoref>=4.0',
-        'pyjsonnlp>=0.2.12',
+        'pyjsonnlpmedstruct>=0.2.12',
         'benepar[cpu]>=0.1.2',
         'cython',
         'numpy>=1.14'
